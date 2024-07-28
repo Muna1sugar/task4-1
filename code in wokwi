@@ -1,0 +1,36 @@
+#include <Arduino.h>
+
+const int lightSensorPin = 34;  // الدبوس المتصل بحساس الضوء
+const int motionSensorPin = 32; // الدبوس المتصل بحساس الحركة
+const int lampPin = 27;         // الدبوس المتصل باللمبة
+
+void setup() {
+  pinMode(lightSensorPin, INPUT);
+  pinMode(motionSensorPin, INPUT);
+  pinMode(lampPin, OUTPUT);
+  Serial.begin(115200);
+}
+
+void loop() {
+  int lightValue = analogRead(lightSensorPin);
+  int motionValue = digitalRead(motionSensorPin);
+
+  // إذا كان هناك حركة وبدون ضوء، افتح اللمبة
+  if (motionValue == HIGH && lightValue < 1000) {
+    digitalWrite(lampPin, HIGH);
+  }
+  // إذا كان هناك ضوء، اغلق اللمبة
+  else if (lightValue > 1000) {
+    digitalWrite(lampPin, LOW);
+  }
+  // إذا كان هناك حركة وبدون ضوء، افتح اللمبة
+  else if (motionValue == HIGH) {
+    digitalWrite(lampPin, HIGH);
+  }
+  // إذا لم يكن هناك حركة وبدون ضوء، اغلق اللمبة
+  else {
+    digitalWrite(lampPin, LOW);
+  }
+
+  delay(1000); // تأخير لقراءة الحساسات بشكل دوري
+}
